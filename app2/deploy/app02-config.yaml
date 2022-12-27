@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app02
+  labels:
+    app: app02
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app02
+  template:
+    metadata:
+      labels:
+        app: app02
+    spec:
+      volumes:
+      - name: dir
+        hostPath:
+          path: /src
+      imagePullSecrets:
+      - name: my-key
+      containers:
+      - name: app02
+        image: registry.hub.docker.com/sanjoydeb0007/app02
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: dir
+          mountPath: /src
+        ports:
+          - containerPort: 8000
+      nodeSelector:
+        region: "worker2"
